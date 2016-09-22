@@ -3,7 +3,7 @@ import { getDocList } from '../../services/todos';
 import { Input, Select, Button, Icon } from 'antd';
 import classNames from 'classnames';
 const Option = Select.Option;
-const ReactMarkdown = require('react-markdown');
+import ReactMarkdown from 'react-markdown';
 import {fetchDoc,fetchJson} from '../../services/xFetch';
 
 import MainLayout from '../../layouts/MainLayout/MainLayout';
@@ -44,7 +44,6 @@ const SearchInput = React.createClass({
 
   },
   selectAct(value){
-    alert(value);
     this.setState({url:value})
 //    this.setState({ value });
     this.props.selectMd(value);
@@ -113,9 +112,10 @@ const SearchAnno = React.createClass({
   render() {
     return (
       <MainLayout>
-
+        <div>
         <SearchInput placeholder="input search text" selectMd={this.selectAct} style={{ width: 200 }} />
         <ReactMarkdown source={this.state.mdvalue} />
+         </div>
       </MainLayout>
     );
   },

@@ -30,7 +30,12 @@ module.exports = {
     console.log(res);
     setTimeout(function () {
       res.type("text");
-      res.end("#ddddd22");
+      res.end(
+        `# ddddd22 
+        # dddd 
+      aaa a[a]
+
+`);
     }, 500);
   },
   '/docs/list.json': function (req, res) {
