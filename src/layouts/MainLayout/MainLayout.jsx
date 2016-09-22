@@ -14,9 +14,7 @@ const MainLayout = ({ children }) => {
           <Link to="/anno" >注解</Link><br />
           <h2>筛选:</h2>
           <Link to="/">All</Link><br />
-          <Link to="/">Actived</Link><br />
           <Link to="/completed">Completed</Link><br />
-          <Link to="/404">404</Link><br />
         </div>
         <div className={styles.main}>
           {children}

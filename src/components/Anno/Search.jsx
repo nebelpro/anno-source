@@ -1,85 +1,84 @@
 import React from 'react';
+import { getDocList } from '../../services/todos';
 import { Input, Select, Button, Icon } from 'antd';
-import jsonp from 'jsonp';
-import querystring from 'querystring';
 import classNames from 'classnames';
 const Option = Select.Option;
+const ReactMarkdown = require('react-markdown');
+import {fetchDoc,fetchJson} from '../../services/xFetch';
+
 import MainLayout from '../../layouts/MainLayout/MainLayout';
 
-let timeout;
-let currentValue;
 
-function fetch(value, callback) {
-  if (timeout) {
-    clearTimeout(timeout);
-    timeout = null;
-  }
-  currentValue = value;
 
-  function fake() {
-    const str = querystring.encode({
-      code: 'utf-8',
-      q: value,
-    });
-    jsonp(`http://suggest.taobao.com/sug?${str}`, (err, d) => {
-      if (currentValue === value) {
-        const result = d.result;
-        const data = [];
-        result.forEach((r) => {
-          data.push({
-            value: r[0],
-            text: r[0],
-          });
-        });
-        callback(data);
-      }
-    });
-  }
-
-  timeout = setTimeout(fake, 300);
-}
 
 const SearchInput = React.createClass({
   getInitialState() {
     return {
-      data: [],
-      value: '',
+      list: [],
+      name: '',
+      url:"",
       focus: false,
+      selectMd:function(){}
     };
   },
   handleChange(value) {
-    this.setState({ value });
-    fetch(value, (data) => this.setState({ data }));
+
+    getDocList().then(({ jsonResult }) => {
+
+      let listData=[];
+      if(value){
+
+         listData = jsonResult.data.filter(item=>{
+           return item.name.toLowerCase().indexOf(value.toLowerCase())>-1;
+        });
+
+      }else{
+        listData = jsonResult.data;
+      }
+
+      this.setState({
+        list: listData,
+
+      });
+    })
+
+  },
+  selectAct(value){
+    alert(value);
+    this.setState({url:value})
+//    this.setState({ value });
+    this.props.selectMd(value);
   },
   handleSubmit() {
-    console.log('输入框内容是: ', this.state.value);
+    if(this.state.url){
+      this.props.selectMd(this.state.url);
+    }else{
+      alert("没有找到相关注解")
+    }
   },
-  handleFocusBlur(e) {
-    this.setState({
-      focus: e.target === document.activeElement,
-    });
-  },
+
   render() {
     const btnCls = classNames({
       'ant-search-btn': true,
-      'ant-search-btn-noempty': !!this.state.value.trim(),
+      'ant-search-btn-noempty': !!this.state.name.trim(),
     });
     const searchCls = classNames({
       'ant-search-input': true,
       'ant-search-input-focus': this.state.focus,
     });
-    const options = this.state.data.map(d => <Option key={d.value}>{d.text}</Option>);
+    const options = this.state.list.map(d => <Option key={d.url}>{d.name}</Option>);
     return (
       <div className="ant-search-input-wrapper" style={this.props.style}>
         <Input.Group className={searchCls}>
           <Select
             combobox
-            value={this.state.value}
+            value={this.state.name}
             placeholder={this.props.placeholder}
             notFoundContent=""
             defaultActiveFirstOption={false}
             showArrow={false}
             filterOption={false}
+            onSelect={this.selectAct}
             onChange={this.handleChange}
             onFocus={this.handleFocusBlur}
             onBlur={this.handleFocusBlur}
@@ -100,11 +99,23 @@ const SearchInput = React.createClass({
 
 
 const SearchAnno = React.createClass({
+  getInitialState: function () {
+    return {
+      mdvalue: ""
+    };
+  },
+  selectAct(value){
+    fetchDoc("/docs/spring/"+value).then(resp=>{
+
+      this.setState({mdvalue:resp});
+    })
+  },
   render() {
     return (
       <MainLayout>
 
-      <SearchInput placeholder="input search text" style={{ width: 200 }} />
+        <SearchInput placeholder="input search text" selectMd={this.selectAct} style={{ width: 200 }} />
+        <ReactMarkdown source={this.state.mdvalue} />
       </MainLayout>
     );
   },

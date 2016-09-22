@@ -16,7 +16,10 @@ function check404(res) {
   }
   return res;
 }
-
+function responseToText(response) {
+  if (response.status >= 400) throw new Error("Bad server response");
+  return response.text();
+}
 function jsonParse(res) {
   return res.json().then(jsonResult => ({ ...res, jsonResult }));
 }
@@ -44,16 +47,11 @@ export let  fetchJson = (url, options) =>{
 }
 export let  fetchDoc = (url, options) =>{
   const opts = { ...options };
-  opts.headers = {
-    ...opts.headers,
-    authorization: cookie.get('authorization') || '',
-  };
 
   return fetch(url, opts)
-    .then(check401)
+
     .then(check404)
     .then(function(res){
-      return res;
+      return res.text();
     })
-    .then(errorMessageParse);
 }
