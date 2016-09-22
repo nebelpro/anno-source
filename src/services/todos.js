@@ -1,5 +1,5 @@
-import xFetch from './xFetch';
+import {fetchDoc,fetchJson} from './xFetch';
 
 export async function getAll() {
-  return xFetch('/docs/data.json');
+  return fetchJson('/docs/data.json');
 }

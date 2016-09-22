@@ -29,7 +29,7 @@ function errorMessageParse(res) {
   return res;
 }
 
-function xFetch(url, options) {
+export let  fetchJson = (url, options) =>{
   const opts = { ...options };
   opts.headers = {
     ...opts.headers,
@@ -42,5 +42,18 @@ function xFetch(url, options) {
     .then(jsonParse)
     .then(errorMessageParse);
 }
+export let  fetchDoc = (url, options) =>{
+  const opts = { ...options };
+  opts.headers = {
+    ...opts.headers,
+    authorization: cookie.get('authorization') || '',
+  };
 
-export default xFetch;
+  return fetch(url, opts)
+    .then(check401)
+    .then(check404)
+    .then(function(res){
+      return res;
+    })
+    .then(errorMessageParse);
+}

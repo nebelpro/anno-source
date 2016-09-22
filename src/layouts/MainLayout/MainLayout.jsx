@@ -10,6 +10,8 @@ const MainLayout = ({ children }) => {
       </div>
       <div className={styles.content}>
         <div className={styles.side}>
+          <h2>注解搜索</h2>
+          <Link to="/anno" >注解</Link><br />
           <h2>筛选:</h2>
           <Link to="/">All</Link><br />
           <Link to="/">Actived</Link><br />
