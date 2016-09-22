@@ -6,6 +6,7 @@ const Option = Select.Option;
 import ReactMarkdown from 'react-markdown';
 import {fetchDoc,fetchJson} from '../../services/xFetch';
 
+
 import MainLayout from '../../layouts/MainLayout/MainLayout';
 
 
@@ -100,7 +101,8 @@ const SearchInput = React.createClass({
 const SearchAnno = React.createClass({
   getInitialState: function () {
     return {
-      mdvalue: ""
+      mdvalue: "",
+      markcss:"markdown-body"
     };
   },
   selectAct(value){
@@ -114,7 +116,7 @@ const SearchAnno = React.createClass({
       <MainLayout>
         <div>
         <SearchInput placeholder="input search text" selectMd={this.selectAct} style={{ width: 200 }} />
-        <ReactMarkdown source={this.state.mdvalue} />
+        <ReactMarkdown className={this.state.markcss} source={this.state.mdvalue} />
          </div>
       </MainLayout>
     );

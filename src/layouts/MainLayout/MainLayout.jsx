@@ -2,6 +2,7 @@ import React, { Component, PropTypes } from 'react';
 import { Router, Route, IndexRoute, Link } from 'react-router';
 import styles from './MainLayout.less';
 
+
 const MainLayout = ({ children }) => {
   return (
     <div className={styles.normal}>
