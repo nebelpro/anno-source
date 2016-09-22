@@ -2,7 +2,7 @@
 // - https://github.com/dora-js/dora-plugin-proxy#规则定义
 
 module.exports = {
-  '/api/todos': function(req, res) {
+  '/docs/data': function(req, res) {
     setTimeout(function() {
       res.json({
         success: true,
